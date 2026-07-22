@@ -14,6 +14,8 @@ A small, public, beginner-facing starter kit: a step-by-step guide to installing
 
 **Writing style for docs**: `README.md` is written for non-developers. No assumed jargon, explain what each thing is and why it matters, and include a plain-language "what this does" line after every command block.
 
-**Scope discipline**: this repo covers Homebrew, fnm, Node.js, npm, Python, and Claude Code, in that install order (each step depends on the one before it). Don't expand into unrelated tools (Google Cloud CLI, Docker, databases, etc.) unless explicitly asked.
+**Scope discipline**: this repo covers Homebrew, fnm, Node.js, npm, Python, and Claude Code, in that install order (each step depends on the one before it), plus two optional `docs/` guides (customizing `.zshrc`, API key management via macOS Keychain). Don't expand into unrelated tools (Google Cloud CLI, Docker, databases, etc.) unless explicitly asked.
+
+**Example values**: guides use made-up, generic example names (`my-api-token`, `MY_API_TOKEN`) rather than real personal service names or tokens, since this repo is public.
 
 **Cross-linking**: this repo and `terminal-starter-kit` link to each other in their READMEs. If either repo's README structure changes significantly, check the other still links correctly.

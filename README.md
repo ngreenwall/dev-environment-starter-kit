@@ -231,6 +231,13 @@ npm install -g @anthropic-ai/claude-code
 
 - **You get warnings about "unapproved install scripts" when updating (Optional / Advanced section only):** this is a known rough edge with npm's newer security features when using a custom global install folder like `~/.npm-global`. Your tools still work fine, this warning is just npm's approval-tracking getting confused by the non-standard folder location. Not worth reversing your setup over.
 
+## Going further
+
+Once the steps above are done, two optional guides build on this setup:
+
+- [Customizing `.zshrc`](docs/customizing-zshrc.md) — a small, well-explained starter config for your terminal's shell file (history, tab completion, a colored prompt, aliases)
+- [API Key Management](docs/api-key-management.md) — how to safely store API keys and tokens using macOS Keychain instead of plain text files
+
 ## Why "starter"
 
 These steps are a foundation, not the only way to do this. Once you're comfortable, feel free to explore other tools and adjust anything here to fit how you work.
