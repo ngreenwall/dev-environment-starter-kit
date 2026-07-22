@@ -238,6 +238,7 @@ Once the steps above are done, two optional guides build on this setup:
 
 - [Customizing `.zshrc`](docs/customizing-zshrc.md) — a small, well-explained starter config for your terminal's shell file (history, tab completion, a colored prompt, aliases)
 - [API Key Management](docs/api-key-management.md) — how to safely store API keys and tokens using macOS Keychain instead of plain text files
+- [GitHub Setup](docs/github-setup.md) — connecting Git and GitHub so you can back up and share your projects
 
 ## Why "starter"
 
