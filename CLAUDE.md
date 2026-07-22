@@ -8,9 +8,11 @@ A small, public, beginner-facing starter kit: a step-by-step guide to installing
 
 ## Conventions established in this repo
 
-**File naming**: config files meant to be copy-pasted use a `.txt` extension (`zsh/dev-tools-additions.txt`) instead of their real dotfile names, so they open in a text editor on double-click instead of prompting "no application set to open this file." Matches the convention from `terminal-starter-kit`.
+**File naming**: config files meant to be copy-pasted use a `.txt` extension (`zsh/dev-tools-additions.txt`, `zsh/recommended-zshrc.txt`) instead of their real dotfile names, so they open in a text editor on double-click instead of prompting "no application set to open this file." Matches the convention from `terminal-starter-kit`.
 
-**Instruction consistency**: comments inside `dev-tools-additions.txt` must match the steps described in `README.md` exactly, same as `terminal-starter-kit` enforces between its config file headers and README.
+**Two `.zshrc` files, different purposes**: `zsh/dev-tools-additions.txt` is small snippets to append to an existing `.zshrc` (used in the main README's Step 3). `zsh/recommended-zshrc.txt` is a complete, ready-to-use `.zshrc` (fnm + history + tab completion + aliases + shell functions + prompt) meant to replace the whole file, covered in `docs/customizing-zshrc.md`. Keep both in sync if the fnm or npm toolbox blocks change, since the content is duplicated between them.
+
+**Instruction consistency**: comments inside both `.zshrc` files must match the steps described in `README.md` and `docs/customizing-zshrc.md` exactly, same as `terminal-starter-kit` enforces between its config file headers and README.
 
 **Writing style for docs**: `README.md` is written for non-developers. No assumed jargon, explain what each thing is and why it matters, and include a plain-language "what this does" line after every command block.
 

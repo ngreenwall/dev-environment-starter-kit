@@ -1,0 +1,175 @@
+# =============================================================================
+# RECOMMENDED .zshrc — a fuller shell configuration for active dev work
+# =============================================================================
+# This file lives at: ~/.zshrc
+# It runs every time you open a new terminal window or tab.
+# After making changes, run: source ~/.zshrc
+# That reloads the file without closing your terminal.
+#
+# This is a complete, ready-to-use .zshrc. If you're starting from scratch,
+# copy this whole thing into ~/.zshrc. If you already have a .zshrc (for
+# example from Terminal Starter Kit's starter-zshrc.txt), replace it with
+# this instead of appending, so you don't end up with duplicate lines.
+#
+# Sections run top to bottom, so order matters: Homebrew and fnm need to
+# load before anything that depends on them.
+# =============================================================================
+
+
+# --- ENVIRONMENT -------------------------------------------------------------
+# LANG sets your language and character encoding.
+# UTF-8 ensures emoji, accented characters, and symbols display correctly.
+export LANG=en_US.UTF-8
+
+
+# --- HOMEBREW ----------------------------------------------------------------
+# Homebrew is the most popular package manager for macOS.
+# It lets you install developer tools like git, node, and more from the terminal.
+# Install it at: https://brew.sh
+# This line runs Homebrew's setup so all its tools are available in your shell.
+[[ -x /opt/homebrew/bin/brew ]] && eval "$(/opt/homebrew/bin/brew shellenv)"
+
+
+# --- FNM (FAST NODE MANAGER) ---------------------------------------------------
+# Starts fnm so the `node` and `npm` commands work, and switches Node.js
+# versions automatically when you `cd` into a project folder that has a
+# `.nvmrc` or `.node-version` file.
+# See the main README for how to install fnm and Node.js.
+eval "$(fnm env --use-on-cd --shell zsh)"
+
+
+# --- HISTORY -----------------------------------------------------------------
+# Your terminal remembers every command you've typed.
+# HISTFILE is where that history is saved on disk.
+# HISTSIZE is how many commands are kept in memory during a session.
+# SAVEHIST is how many commands are written to the file when you close the terminal.
+HISTFILE=~/.zsh_history
+HISTSIZE=10000
+SAVEHIST=10000
+
+# SHARE_HISTORY syncs history across multiple terminal windows in real time.
+# HIST_IGNORE_SPACE means any command you prefix with a space won't be saved.
+# Useful for one-off sensitive commands you don't want logged (see
+# docs/api-key-management.md).
+setopt SHARE_HISTORY
+setopt HIST_IGNORE_SPACE
+
+
+# --- TAB COMPLETION ------------------------------------------------------------
+# This enables smart tab completion. Press Tab and your terminal will try to
+# finish the command, file name, or flag you're typing.
+# The "if" block checks whether the completion cache is stale (older than 24 hours)
+# and only rebuilds it when necessary, which keeps your shell startup fast.
+autoload -Uz compinit
+if [[ -n ~/.zcompdump(#qN.mh+24) ]]; then
+  compinit
+else
+  compinit -C
+fi
+
+
+# --- NPM GLOBAL TOOLBOX (OPTIONAL) --------------------------------------------
+# Only needed if you followed the "npm Global Toolbox" section of the main
+# README. It keeps globally installed npm tools (like Claude Code) in one
+# fixed folder that doesn't disappear when fnm switches Node versions.
+# If you haven't set that up, delete this block, it does nothing on its own.
+export NPM_CONFIG_PREFIX="$HOME/.npm-global"
+path=("$HOME/.npm-global/bin" $path)
+export NODE_PATH="$HOME/.npm-global/lib/node_modules${NODE_PATH:+:$NODE_PATH}"
+
+
+# --- ALIASES -------------------------------------------------------------------
+# Aliases are shortcuts — type the short version, your terminal runs the full command.
+# If it fits on one line and does one thing, it's a good candidate for an alias.
+# For anything with multiple steps, see Shell Functions below instead.
+
+# ll - a full, detailed, readable view of everything in your current directory
+alias ll='ls -lah'
+
+# gst - shortcut for git status
+alias gst='git status'
+
+
+# --- SHELL FUNCTIONS -----------------------------------------------------------
+# Functions can run multiple steps and keep going even if one step fails,
+# unlike an alias chained with &&, which stops at the first failure.
+
+# upbrew - updates Homebrew itself, all CLI tools, and all GUI apps installed via Homebrew
+upbrew() {
+	echo "Updating Homebrew..."
+	brew update
+	echo ""
+	echo "Upgrading CLI tools..."
+	brew upgrade
+	echo ""
+	echo "Upgrading GUI apps..."
+	brew upgrade --cask
+	echo ""
+	echo "Done."
+}
+
+# upnpm - updates npm itself and all globally installed npm packages
+upnpm() {
+	echo "Updating npm..."
+	npm install -g npm@latest
+	echo ""
+	echo "Updating global npm packages..."
+	npm update -g
+	echo ""
+	echo "Done. npm version: $(npm -v)"
+}
+
+# upnode - installs the latest LTS version of Node.js and sets it as default
+upnode() {
+	echo "Installing latest LTS version of Node..."
+	fnm install --lts
+	echo ""
+	echo "Setting LTS as default..."
+	fnm default lts-latest
+	fnm use default
+	echo ""
+	echo "Done. Node version: $(node -v)"
+}
+
+# checkup - checks Homebrew tools, npm global packages, and your Node version for available updates
+checkup() {
+	echo "Checking Homebrew tools..."
+	brew_outdated=$(brew outdated)
+	if [[ -z "$brew_outdated" ]]; then
+		echo "Up to date."
+	else
+		echo "$brew_outdated"
+	fi
+	echo ""
+	echo "Checking npm global packages..."
+	npm_outdated=$(npm outdated -g)
+	if [[ -z "$npm_outdated" ]]; then
+		echo "Up to date."
+	else
+		echo "$npm_outdated"
+	fi
+	echo ""
+	echo "Comparing Node versions..."
+	echo "Current Node version: $(node -v)"
+	echo "Latest LTS version: $(fnm list-remote --lts | tail -1)"
+	echo ""
+	echo "Checkup complete."
+	echo "To make updates, run upbrew, upnpm, or upnode as needed."
+}
+
+
+# --- PROMPT --------------------------------------------------------------------
+# Controls what your terminal prompt looks like before your cursor.
+# Format: username:current-directory %
+#
+# %n    = your Mac username
+# %~    = current directory (~ = home folder)
+# %#    = shows % for a normal user, # for admin/root
+# %F{n} = sets text color to ANSI color n, %f resets it back to default
+PROMPT='%F{1}%n%f:%F{4}%~%f %F{7}%#%f '
+
+
+# --- SECRETS (OPTIONAL) ---------------------------------------------------------
+# Want to load API keys or tokens here without storing them in plain text?
+# See docs/api-key-management.md for the macOS Keychain pattern, then add
+# your own export lines below this comment, after everything above.

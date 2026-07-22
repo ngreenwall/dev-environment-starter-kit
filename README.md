@@ -108,6 +108,8 @@ source ~/.zshrc
 
 *What this does:* applies the change to your current terminal window immediately, instead of waiting for you to open a new one.
 
+**Want a fuller `.zshrc` instead?** `zsh/recommended-zshrc.txt` is a complete, ready-to-use file that includes the fnm line above plus history settings, tab completion, handy aliases, maintenance shell functions, and a nicer prompt. You can copy that whole file into `~/.zshrc` instead of just the fnm line, see [Customizing .zshrc](docs/customizing-zshrc.md) for details.
+
 **Install Node.js (via fnm):**
 
 ```shell

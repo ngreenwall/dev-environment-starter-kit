@@ -76,6 +76,17 @@ PROMPT='%F{1}%~%f %F{7}%#%f '
 
 That's genuinely enough for most people. Add more as you find you want it.
 
+## Want more? Use the Recommended file instead
+
+Once you're comfortable with the minimum version above, `zsh/recommended-zshrc.txt` in this repo is a complete, ready-to-use `.zshrc` that builds on it. It adds:
+
+- **fnm**, already wired in if you followed the main [README](../README.md)
+- A few handy **aliases**: `ll` (a detailed folder listing) and `gst` (`git status`)
+- **Shell functions** you can just type by name: `upbrew` (update Homebrew and everything installed with it), `upnpm` (update npm and your global npm tools), `upnode` (install and switch to the latest Node LTS), and `checkup` (checks all three at once and tells you what's out of date)
+- A fancier **prompt** that also shows your username
+
+Copy the whole file into `~/.zshrc` (back up your existing one first, same as the main README's fnm step) rather than appending it on top of the minimum version above, so you don't end up with duplicate lines doing the same thing twice.
+
 ## Aliases: shortcuts for commands you type a lot
 
 An alias expands to a longer command when you hit Enter. If you chain multiple commands with `&&`, it stops running as soon as one of them fails.
