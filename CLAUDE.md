@@ -2,6 +2,8 @@
 
 Repo-specific context for working in this project. See `~/.claude/CLAUDE.md` for global preferences.
 
+Check `docs/WORKLOG.md` for the current task list and recent session notes before starting work.
+
 ## What this repo is
 
 A small, public, beginner-facing starter kit: a step-by-step guide to installing the core Mac dev tools (Xcode Command Line Tools, Homebrew, fnm, Node.js, npm, Python, Claude Code). Companion to `terminal-starter-kit` (that one covers making the terminal look better; this one covers what to install). Audience is non-developers, not just engineers browsing GitHub.
@@ -21,3 +23,7 @@ A small, public, beginner-facing starter kit: a step-by-step guide to installing
 **Example values**: guides use made-up, generic example names (`my-api-token`, `MY_API_TOKEN`) rather than real personal service names or tokens, since this repo is public.
 
 **Cross-linking**: this repo and `terminal-starter-kit` link to each other in their READMEs. If either repo's README structure changes significantly, check the other still links correctly.
+
+## Key decisions
+
+- 2026-07-22: `social-preview.png` (repo root) is intentionally kept untracked, not committed, per explicit request. Don't add it to git without checking first.
