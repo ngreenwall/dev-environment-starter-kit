@@ -1,6 +1,6 @@
 # API Key Management
 
-Once you start connecting tools together (Claude Code to an MCP server, a CLI to a service's API, etc.) you'll end up needing to store API keys and tokens somewhere. This guide covers the safe way to do it on a Mac: **macOS Keychain**, not a plain text file.
+An API key (also called a token) is like a password that lets one piece of software prove its identity to another, for example, letting a tool on your Mac connect to an online service on your behalf. Once you start connecting tools together, you'll end up needing to store one or more of these somewhere. This guide covers the safe way to do it on a Mac: **macOS Keychain** (the built-in, encrypted password manager on every Mac), not a plain text file.
 
 ## Why not just paste it into a config file?
 
@@ -18,6 +18,8 @@ Once this is set up, rotating a key later (getting a new one and swapping it in)
 
 ## Step 1: Store the key in Keychain
 
+Throughout this guide, `my-api-token` and `MY_API_TOKEN` are placeholder names, not real values. Swap them for something that describes your actual key (like `openai-api-key`), and use the same name consistently in every step below.
+
 **Easiest way: the Keychain Access app.** This avoids the key ever appearing in your terminal or its history.
 
 1. Open **Keychain Access** (search for it with Spotlight, `Cmd+Space`)
@@ -34,20 +36,20 @@ Once this is set up, rotating a key later (getting a new one and swapping it in)
  security add-generic-password -a "$USER" -s "my-api-token" -w "paste-your-actual-key-here"
 ```
 
-*What this does:* adds a new entry to Keychain named `my-api-token`, tied to your Mac username, storing the key you pasted.
+*What this does:* adds a new entry to Keychain named `my-api-token`, tied to your Mac username (`$USER` is a built-in variable that always holds your own Mac username, so you don't have to type it out), storing the key you pasted.
 
 > [!IMPORTANT]
 > Use the **login** keychain, not iCloud Keychain. The command-line tool used below only reliably reads from the login keychain. This also means keys stored this way are local to this Mac, you'll need to re-add them on any other Mac you use.
 
 ## Step 2: Load it into your terminal via `.zshrc`
 
-Add a line to `~/.zshrc` that reads the key out of Keychain every time you open a terminal:
+An environment variable is a named value your terminal keeps in memory, so any command or tool you run can read it just by using its name, without you retyping the actual value every time. Add a line to `~/.zshrc` that creates one by reading the key out of Keychain every time you open a terminal:
 
 ```shell
 export MY_API_TOKEN=$(security find-generic-password -a "$USER" -s "my-api-token" -w 2>/dev/null)
 ```
 
-*What this does:* looks up the `my-api-token` entry in Keychain and saves its value into an environment variable called `MY_API_TOKEN`, available in that terminal window from then on. Swap `MY_API_TOKEN` and `my-api-token` for names that make sense for your key.
+*What this does:* the `$(...)` part runs the Keychain lookup command and captures whatever it prints; `export` then saves that result into an environment variable called `MY_API_TOKEN`, available in that terminal window from then on. The `2>/dev/null` at the end just hides an error message in case the entry isn't found yet, so it fails quietly instead of printing something alarming-looking.
 
 Reload your shell so the change takes effect right away:
 
@@ -65,7 +67,7 @@ echo $MY_API_TOKEN
 
 ## Step 3: Use it in tool configs and commands
 
-Most command-line tools, including Claude Code, automatically pick up environment variables like this with no extra setup. If a tool's config file supports variable references, use the variable name instead of pasting the real key. For example, a JSON config might look like:
+Most command-line tools, including Claude Code, automatically pick up environment variables like this with no extra setup. If a tool's config file supports variable references, use the variable name instead of pasting the real key. For example, a JSON config (JSON is a common plain-text format config files use, built out of `{ }` braces and `"key": "value"` pairs) might look like:
 
 ```json
 "env": {
@@ -106,11 +108,15 @@ setopt HIST_IGNORE_SPACE
    security delete-generic-password -a "$USER" -s "my-api-token"
    ```
 
+   *What this does:* removes the old `my-api-token` Keychain entry so it doesn't linger or get mixed up with the new one.
+
 3. Add the new one, same as Step 1:
 
    ```shell
     security add-generic-password -a "$USER" -s "my-api-token" -w "your-new-key-here"
    ```
+
+   *What this does:* stores the new key under the same Keychain entry name as before.
 
 4. Reload: `source ~/.zshrc`
 

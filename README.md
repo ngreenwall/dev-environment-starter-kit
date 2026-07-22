@@ -48,7 +48,7 @@ Homebrew is a package manager, meaning it lets you install and update software w
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 ```
 
-*What this does:* runs Homebrew's official installer. It checks for Xcode Command Line Tools (installing them if you skipped Step 1), downloads Homebrew, and may tell you to run a couple of extra setup lines afterward, especially on newer Macs with Apple Silicon chips. If it does, copy and run exactly what it shows you.
+*What this does:* runs Homebrew's official installer. It checks for Xcode Command Line Tools (installing them if you skipped Step 1), downloads Homebrew, and may tell you to run a couple of extra setup lines afterward, especially on newer Macs with Apple Silicon chips (the M1/M2/M3/etc. chips Apple has used since 2020, as opposed to older Intel chips). If it does, copy and run exactly what it shows you.
 
 Once it finishes, double check everything is healthy:
 
@@ -56,7 +56,7 @@ Once it finishes, double check everything is healthy:
 brew doctor
 ```
 
-*What this does:* checks your Homebrew install for common problems and tells you if anything needs fixing.
+*What this does:* checks your Homebrew install for common problems and tells you if anything needs fixing. It's normal for this to print one or more "Warning" messages, most are just suggestions, not signs something's broken. Only worry if it explicitly says something is missing or failed.
 
 **Verify it worked:**
 
@@ -66,13 +66,7 @@ brew --version
 
 *What this does:* prints the installed Homebrew version.
 
-From here on, installing most software is just:
-
-```shell
-brew install <name-of-thing>
-```
-
-You'll use this exact pattern in the next two steps.
+From here on, installing most software is just `brew install` followed by the name of the thing you want. For example, `brew install wget` would install a tool called `wget`. You don't need to run that now, it's just to show the pattern, since you'll use it for real with `fnm` and `python` in the next two steps.
 
 ## Step 3: fnm, Node.js, and npm
 
@@ -92,7 +86,7 @@ cp ~/.zshrc ~/.zshrc.backup
 
 *What this does:* makes a copy named `.zshrc.backup` in your home folder.
 
-**Add fnm to your shell.** Open your `.zshrc` file:
+**Add fnm to your shell.** ("Shell" is the program that actually reads and runs the commands you type, zsh is the one macOS uses by default, which is why you're editing `.zshrc`.) Open your `.zshrc` file:
 
 ```shell
 open -e ~/.zshrc
@@ -108,12 +102,12 @@ source ~/.zshrc
 
 *What this does:* applies the change to your current terminal window immediately, instead of waiting for you to open a new one.
 
-**Want a fuller `.zshrc` instead?** `zsh/recommended-zshrc.txt` is a complete, ready-to-use file that includes the fnm line above plus history settings, tab completion, handy aliases, maintenance shell functions, and a nicer prompt. You can copy that whole file into `~/.zshrc` instead of just the fnm line, see [Customizing .zshrc](docs/customizing-zshrc.md) for details.
+**Want a fuller `.zshrc` instead?** `zsh/recommended-zshrc.txt` is a complete, ready-to-use file that includes the fnm line above plus history settings, tab completion, handy aliases, maintenance shell functions, and a nicer prompt. It also includes the optional npm Global Toolbox block described further down this page, active by default, delete that block if you don't want it yet. You can copy the whole file into `~/.zshrc` instead of just the fnm line, see [Customizing .zshrc](docs/customizing-zshrc.md) for details.
 
 **Install Node.js (via fnm):**
 
 ```shell
-fnm install --lts && fnm default lts-latest && fnm use default
+fnm install --lts && fnm use default
 ```
 
 *What this does:* installs the latest LTS ("Long Term Support," the stable version recommended for most work) release of Node.js, and sets it as the default for both new and current terminal windows.
@@ -157,6 +151,9 @@ npm install -g @anthropic-ai/claude-code
 
 *What this does:* downloads and installs Claude Code globally, meaning it's available from any folder in your terminal, not just one project.
 
+> [!NOTE]
+> Anthropic's own docs now point people toward a different install method, a "native installer" that doesn't need Node.js at all, as the default way to get Claude Code. We're using the npm method here on purpose, since you've already set up Node and npm in this guide and it reinforces how they fit together. Either way gets you the same tool. If you ever want the native installer instead: `curl -fsSL https://claude.ai/install.sh | bash`.
+
 **Verify it worked:**
 
 ```shell
@@ -197,11 +194,13 @@ npm config set prefix '~/.npm-global'
 
 *What this does:* tells npm to install anything you install with `-g` (global) into this new folder from now on, instead of the current Node version's own folder.
 
-**3. Update your `.zshrc`.** Open it the same way as Step 3, then copy the "OPTIONAL / ADVANCED: npm Global Toolbox" block from `zsh/dev-tools-additions.txt` into the file, below the fnm line. Save, then reload:
+**3. Update your `.zshrc`.** Open it the same way as Step 3, then copy the "NPM GLOBAL TOOLBOX" block from `zsh/dev-tools-additions.txt` into the file, below the fnm line. Save, then reload:
 
 ```shell
 source ~/.zshrc
 ```
+
+*What this does:* applies the new block to your current terminal window, so npm starts using the new folder right away instead of waiting for a new window.
 
 **4. Reinstall your global tools one last time**, including Claude Code:
 

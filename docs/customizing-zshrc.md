@@ -52,8 +52,9 @@ setopt HIST_IGNORE_SPACE
 
 # --- TAB COMPLETION ---
 # Press Tab and your terminal tries to finish the command, file name, or flag
-# you're typing. The check below only rebuilds the completion cache once a
-# day, which keeps your terminal opening quickly.
+# you're typing. The check below only rebuilds the completion cache (a saved
+# copy of this data it reuses instead of regenerating from scratch every
+# time) once a day, which keeps your terminal opening quickly.
 autoload -Uz compinit
 if [[ -n ~/.zcompdump(#qN.mh+24) ]]; then
 	compinit
@@ -69,8 +70,9 @@ alias upbrew='brew update && brew upgrade'
 
 # --- PROMPT ---
 # Controls what your terminal prompt looks like before your cursor.
-# %~ = current folder (~ = home), %# = % for a normal user, # for admin/root
-# %F{n} sets text color to ANSI color n, %f resets it back to default
+# %~ = current folder (~ = home)
+# %# = % for a normal user, # if you're root (the Mac's all-powerful admin account, rare to be logged in as)
+# %F{n} sets text color to a numbered color code your terminal understands (an "ANSI color"), %f resets it back to default
 PROMPT='%F{1}%~%f %F{7}%#%f '
 ```
 
@@ -86,6 +88,8 @@ Once you're comfortable with the minimum version above, `zsh/recommended-zshrc.t
 - A fancier **prompt** that also shows your username
 
 Copy the whole file into `~/.zshrc` (back up your existing one first, same as the main README's fnm step) rather than appending it on top of the minimum version above, so you don't end up with duplicate lines doing the same thing twice.
+
+One thing to note: the minimum version above has `upbrew` as an alias that runs `brew update && brew upgrade`. The recommended file replaces it with a function of the same name that also upgrades GUI apps (`brew upgrade --cask`). Copying the recommended file changes what typing `upbrew` actually does, not just how it's defined.
 
 ## Aliases: shortcuts for commands you type a lot
 
@@ -103,6 +107,8 @@ To remove an alias from your *current* terminal session without editing the file
 ```shell
 unalias gst
 ```
+
+*What this does:* removes the `gst` shortcut for this terminal window only. `.zshrc` itself is untouched, so `gst` comes back the next time you open a new window.
 
 ## Troubleshooting
 
